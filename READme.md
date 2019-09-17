@@ -7,6 +7,7 @@
   - [Steps to setup the environment](#steps-to-setup-the-environment)
   - [<a name="create-new-react360-project"></a>Create a new React360 Project](#a-name%22create-new-react360-project%22acreate-a-new-react360-project)
     - [version control set-up](#version-control-set-up)
+  - [<a name="steps-to-setup-the-environment"></a>Steps to setup the environment](#a-name%22steps-to-setup-the-environment%22asteps-to-setup-the-environment)
 - [Part 2: The Backend](#part-2-the-backend)
 - [Part 3: Continuous Delivery and version control](#part-3-continuous-delivery-and-version-control)
 - [Contributors](#contributors)
@@ -19,8 +20,8 @@
 ### <a name="getting-started"></a>Getting Started
 
 #### Tech Stacks
-|            React360            |             JavaScript              |             Django              |             GraphQL              | Apollo |             Python              |
-| :----------------------------: | :---------------------------------: | :-----------------------------: | :------------------------------: | :----: | :-----------------------------: | :-----------------------------: |
+|            React360            | JavaScript                          | Django                          |             GraphQL              | Apollo |             Python              |
+| :----------------------------: | :---------------------------------- | :------------------------------ | :------------------------------: | :----: | :-----------------------------: |
 | ![](./static_assets/react.png) | ![](./static_assets/JavaScript.png) | ![](./static_assets/django.png) | ![](./static_assets/graphql.png) |        | ![](./static_assets/python.png) | ![](./static_assets/apollo.png) | ![](./static_assets/python.png) |
 
 
@@ -28,7 +29,7 @@
 
 This is a Virtual Reality experience created using the opensource Facebook's React360 library that makes use of [threejs](https://threejs.org).
 
-In this awesome experience, I am going to create an amazing 360 and VR experience for the Facebook Developers community and showcase the power of using Javascript to create VR experiences for Web and cross-platform devices augment the current virtual reality experiences of others such as [unity3d](https://unity.com), [Vive](https://www.vive.com/eu/product/vive-pro/), Samsung Oculus and many others.
+In this awesome experience, I am going to create an amazing 360 and VR experience for the Facebook Developers Nairobi community and showcase the power of using Javascript to create VR experiences for Web and cross-platform devices augment the current virtual reality experiences of others such as [unity3d](https://unity.com), [Vive](https://www.vive.com/eu/product/vive-pro/), Samsung Oculus and many others.
 
 I will be adding a backend api to act as a data store.
 This repo will be continuously be updated and new technologies introduced with time, such as, Dockerising our app to leverage the power micro-services and managing and scaling our apps with Kubernetes. We will eventually deploy and run this app on one of the popular cloud providers such as AWS, Azure of Google Cloud.
@@ -88,21 +89,68 @@ $ git push -u origin master
 ```
 
 Move the index.html to ./Public folder and update imports on
+
+### <a name="steps-to-setup-the-environment"></a>Steps to setup the environment
+
+Add some testing
+
+Update your package.json to  include testing tools such as
+In /src add the following test file
+
+```javascript
+import { configure } from 'enzyme'
+import Adapter from 'enzyme-adapter-react-16'
+
+configure({ adapter: new Adapter() });
+```
+
+
 ## [Part 2: The Backend](#part2)
 
 Now we can add a backend API or utilise one if we have it on our development stack.
 
 ## [Part 3: Continuous Delivery and version control](#part3)
+We are going to use Docker containers for our application.
 
-To Get started with this project:
+Create a bash script `test.sh`  to be used by our automating & CI testing pipeline [Travis CI](https://docs.travis-ci.com/user/docker/)
+
+In the React360VRTour directory add the following file for CICD Pipeline.  Edit the file to have
+
+```yaml
+sudo: required
+
+services:
+  - docker
+
+env:
+  DOCKER_COMPOSE_VERSION: 1.24.1
+
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+before_script:
+  - export REACT360_SERVICE_URL=http://127.0.0.1
+  - yarn install
+
+script:
+  - bash test.sh
+
+
+```
+
+
+
+
+***To Get started with this project:***
 
 clone this repository or create a new repository on the command line
 
 ```sh
 git clone
 ```
-
-Developed by a group of FaceBooks DevC 2019
 
 ## Contributors
 
